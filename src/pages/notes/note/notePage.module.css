@@ -11,3 +11,16 @@
   position: relative;
   overflow-y: auto;
 }
+
+.errorContainer {
+  padding: 1rem;
+  background-color: #ffebee;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.savingIndicator {
+  margin-left: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+}

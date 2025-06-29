@@ -1,12 +1,12 @@
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
-import styles from "./BasicTextFields.module.css";
+import styles from "./SearchBox.module.css";
 
 export type onInputChange = {
     onInputChange: (value: string) => void;
 };
-export function BasicTextFields({ onInputChange }: onInputChange) {
+export function SearchBox({ onInputChange }: onInputChange) {
     const [inputValue, setInputValue] = useState("");
     console.log("inputValue", inputValue);
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
