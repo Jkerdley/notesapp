@@ -1,0 +1,44 @@
+.noteCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* width: 100%; */
+  max-height: 10rem;
+  background: rgba(227, 231, 238, 0.6);
+  /* box-shadow: 3px 5px 5px rgba(52, 56, 64, 0.13); */
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  backdrop-filter: blur(2rem);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding-right: 0.25rem;
+}
+
+.noteCard:hover {
+  background: rgba(222, 226, 234, 1);
+  transform: scale3d(1.05, 1.05, 1.25);
+
+
+}
+
+.noteCard p {
+  color: rgb(13, 17, 24);
+  margin-bottom: 5px;
+  margin-top: 0;
+}
+
+.heroInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  color: gainsboro;
+  padding-right: 0.25rem;
+  text-align: left;
+}

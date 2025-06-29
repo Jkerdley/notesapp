@@ -1,0 +1,50 @@
+.nav {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: 100%;
+  margin-bottom: 3rem;
+
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: rgb(7, 27, 36);
+  height: 2rem;
+  border-radius: 0.5rem;
+  padding-inline: 0.75rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.navLink:hover {
+  background: #86a1ad;
+  color: white;
+}
+
+.login {
+  position: absolute;
+  left: 0;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background: rgba(227, 231, 238, 0.6);
+  padding: 10px 20px;
+  border-radius: 0 0 15px 15px;
+  /* box-shadow: 3px 5px 5px rgba(52, 56, 64, 0.12); */
+  margin-bottom: 3rem;
+}
+
+.menuBar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}

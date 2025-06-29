@@ -1,0 +1,19 @@
+.auth {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 1000;
+  width: auto;
+
+}
+
+.authPerson {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: rgb(5, 24, 32);
+}
+
+.customGreenBtn {
+  background-color: rgb(64, 131, 136);
+}

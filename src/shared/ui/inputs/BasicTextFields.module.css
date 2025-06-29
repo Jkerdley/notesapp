@@ -1,0 +1,9 @@
+.basicTextField {
+    /* width: 100%; */
+    padding: 0.5rem 1rem;
+    background: #f4f7fa;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
