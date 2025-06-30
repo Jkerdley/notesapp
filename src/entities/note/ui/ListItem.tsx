@@ -13,7 +13,7 @@ export const ListItem = ({ note, link, isAddButton }: ListItemProps) => {
     return (
         <Link to={link} className={styles.linkWrapper}>
             {isAddButton ? (
-                <AddNoteButton link={link} />
+                <AddNoteButton />
             ) : (
                 <article className={styles.noteCard}>
                     <div className={styles.infoContainer}>
