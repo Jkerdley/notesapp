@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styles from "./ListItem.module.css";
-import type { Note } from "../../../shared/lib/api/notes-db";
 import { AddNoteButton } from "../../../features/addNote/AddNoteButton";
+import type { Note } from "../model/note.types";
 
 interface ListItemProps {
     note?: Note;
