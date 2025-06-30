@@ -1,0 +1,77 @@
+{
+  "name": "NoteApp",
+  "short_name": "NoteApp",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "description": "Note app",
+  "lang": "Russian",
+  "dir": "auto",
+  "theme_color": "#E0E0E0",
+  "background_color": "#D4D4D4",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "src/shared/assets/pwaicons/note64x64.webp",
+      "sizes": "64x64",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "src/shared/assets/pwaicons/note72x72.webp",
+      "sizes": "72x72",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "src/shared/assets/pwaicons/note96x96.webp",
+      "sizes": "96x96",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "src/shared/assets/pwaicons/note128x128.webp",
+      "sizes": "128x128",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "src/shared/assets/pwaicons/note152x152.webp",
+      "sizes": "152x152",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "src/shared/assets/pwaicons/note192x192.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "src/shared/assets/pwaicons/note384x384.webp",
+      "sizes": "384x384",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "src/shared/assets/pwaicons/note512x512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "src/shared/assets/pwaicons/screenshot.jpg",
+      "sizes": "1716x788",
+      "type": "image/jpg",
+      "description": "Notes page screen"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Notes",
+      "url": "/index.html",
+      "description": "Note app"
+    }
+  ]
+}
