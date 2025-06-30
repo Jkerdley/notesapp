@@ -6,6 +6,11 @@ import { LazyComponent } from "../../../shared/components";
 import { NotFoundPage } from "../../../pages/404/page";
 import { LoginPage } from "../../../pages/auth/login/page";
 
+const MainPage = lazy(() =>
+    import("../../../pages/main/page").then((module) => ({
+        default: module.MainPage,
+    }))
+);
 const NotesPage = lazy(() =>
     import("../../../pages/notes/page").then((module) => ({
         default: module.NotesPage,
@@ -26,7 +31,7 @@ export function Router() {
                     element={
                         <PrivateRoute>
                             <LazyComponent>
-                                <NotFoundPage />
+                                <MainPage />
                             </LazyComponent>
                         </PrivateRoute>
                     }
