@@ -6,20 +6,20 @@
   align-items: center;
 }
 .customGreenBtn {
-  background-color: green;
-  border-color: green;
+  background-color: teal;
+  border-color: teal;
 }
 
 .formLabel {
-  color: #ffffff;
+  color: #3e4f50;
 }
 
 /* Для текста чекбокса */
 .checkboxLabel {
-  color: #ffffff;
+  color: #3e4f50;
 }
 
 /* Для сообщений валидации */
 .validationMessage {
-  color: #f44336;
+  color: #f1744e;
 }
