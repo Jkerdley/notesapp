@@ -12,11 +12,13 @@
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   position: relative;
+  margin: 1rem;
 }
 
 .infoContainer {
   display: flex;
   flex-direction: column;
+  width: 100%;
   gap: 0.15rem;
   padding-right: 0.25rem;
 }
@@ -24,8 +26,10 @@
 .noteCard:hover {
   background: rgba(222, 226, 234, 1);
   transform: scale3d(1.05, 1.05, 1.25);
+}
 
-
+.noteCard:focus {
+  background: rgb(63, 98, 167);
 }
 
 .noteCard p {
@@ -34,10 +38,21 @@
   margin-top: 0;
 }
 
-.heroInfo {
+.noteDescription {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.noteInfo {
   display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 0.25rem;
   color: gainsboro;
   padding-right: 0.25rem;
   text-align: left;
