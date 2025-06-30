@@ -1,12 +1,5 @@
 import Dexie, { type Table } from "dexie";
-export interface Note {
-  id?: number;
-  title: string;
-  content: string;
-  createdAt: Date;
-  updatedAt: Date;
-  tags?: string[];
-}
+import type { Note } from "../../../entities/note/model/note.types";
 
 export class NotesDB extends Dexie {
   notes!: Table<Note>;

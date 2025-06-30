@@ -1,21 +1,25 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Button, TextField } from "@mui/material";
+import { Button } from "@mui/material";
 import { dbService } from "../../../shared/lib/api/notes-db";
 import { marked } from "marked";
 import { useDebouncedCallback } from "use-debounce";
 import styles from "./notePage.module.css";
 import { useLiveQuery } from "dexie-react-hooks";
+import { NoteEditor } from "../../../features";
+import { useNoteEditor } from "../../../features/noteEditor/model/useNoteEditor";
+import { SaveIndicator } from "../../../shared/ui";
 
 export const NotePage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const noteId = Number(id);
-  const [formData, setFormData] = useState({ title: "", content: "" });
+  const isNew = id === "new";
+
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const navigate = useNavigate();
+  const { formData, setFormData, handleChange } = useNoteEditor({ title: "", content: "" });
 
-  const isNew = id === "new";
   const note = useLiveQuery(() => dbService.getNote(noteId), [noteId]);
 
   useEffect(() => {
@@ -66,10 +70,6 @@ export const NotePage = () => {
     }
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
-  };
-
   if (!note && !isNew) return <p>Заметка не найдена</p>;
 
   return (
@@ -82,34 +82,11 @@ export const NotePage = () => {
         <Button variant="contained" onClick={() => setIsEditing(!isEditing)}>
           {isEditing ? "Сохранить" : "Редактировать"}
         </Button>
-        {isEditing || isSaving ? (
-          <span className={styles.savingIndicator}>Сохранение...</span>
-        ) : (
-          <span className={styles.savedIndicator}>✓ Сохранено</span>
-        )}
+        <SaveIndicator isSaving={isSaving} isEditing={isEditing} />
       </div>
 
       {isEditing ? (
-        <>
-          <TextField
-            fullWidth
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            label="Заголовок"
-            margin="normal"
-          />
-          <TextField
-            fullWidth
-            multiline
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            label="Содержание (Markdown)"
-            margin="normal"
-            rows={12}
-          />
-        </>
+       <NoteEditor formData={formData} onChange={handleChange} />
       ) : (
         <>
           <h2>{formData.title}</h2>
