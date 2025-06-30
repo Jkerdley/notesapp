@@ -1,58 +1,53 @@
-import { Outlet, useParams } from "react-router-dom";
 import styles from "./notes.module.css";
-import { SearchBox } from "../../shared/ui";
-import { ListItem } from "../../entities/note/ui";
-import { useLiveQuery } from "dexie-react-hooks";
-import { dbService } from "../../shared/lib/api/notes-db";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AddNoteButton } from "../../features/addNote/AddNoteButton";
+import { useNotes } from "../../shared/hooks/useNotes";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { dbService } from "../../shared/lib/api/notes-db";
+import { SearchBox } from "../../shared/ui";
+import { ListItem } from "../../entities/note";
 
 export const NotesPage = () => {
-    const { id } = useParams();
-    const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [searchQuery, setSearchQuery] = useState("");
+  const { notes: filteredNotes } = useNotes(searchQuery);
 
-    const allNotes = useLiveQuery(() => dbService.getAllNotes(), []);
-    const filteredNotes = useLiveQuery(
-        () => (searchQuery ? dbService.searchNotes(searchQuery) : Promise.resolve(allNotes || [])),
-        [searchQuery, allNotes]
-    );
+  const handleAddNewNote = async () => {
+    const newId = await dbService.addNote({
+      title: "Заголовок заметки",
+      content: "Текст заметки",
+      tags: ["Тэг заметки"],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    navigate(`/notes/${newId}`);
+  };
 
-    useEffect(() => {
-        if (allNotes?.length === 0) {
-            dbService.addNote({
-                title: "Первая заметка",
-                content: "Это ваша первая заметка. Можете ее отредактировать или удалить.",
-                tags: ["пример"],
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            });
-        }
-    }, [allNotes]);
-
-    return (
-        <div className={styles.notesPage}>
-            <div className={styles.notesGrid}>
-                <div className={styles.notesListContainer}>
-                    <SearchBox onInputChange={setSearchQuery} />
-                    <div className={styles.notesListContent}>
-                        {filteredNotes?.map((note) => (
-                            <ListItem key={note.id} note={note} link={`/notes/${note.id}`} />
-                        ))}
-                    </div>
-                    <AddNoteButton link="/notes/new" />
-                </div>
-                <div className={styles.noteDetailContainer}>
-                    {id ? (
-                        <Outlet />
-                    ) : (
-                        <div className={styles.emptySelection}>
-                            <h2>Выберите заметку</h2>
-                            <p>Слева выберите заметку для просмотра деталей</p>
-                            <AddNoteButton link="/notes/new" />
-                        </div>
-                    )}
-                </div>
-            </div>
+  return (
+    <div className={styles.notesPage}>
+      <div className={styles.notesGrid}>
+        <div className={styles.notesListContainer}>
+          <SearchBox onInputChange={setSearchQuery} />
+          <div className={styles.notesListContent}>
+            {filteredNotes?.map((note) => (
+              <ListItem key={note.id} note={note} link={`/notes/${note.id}`} />
+            ))}
+          </div>
+          <AddNoteButton onClick={handleAddNewNote} />
         </div>
-    );
+        <div className={styles.noteDetailContainer}>
+          {id ? (
+            <Outlet />
+          ) : (
+            <div className={styles.emptySelection}>
+              <h2>Выберите заметку</h2>
+              <p>Слева выберите заметку для просмотра деталей</p>
+              <AddNoteButton onClick={handleAddNewNote} />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };

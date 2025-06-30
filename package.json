@@ -1,8 +1,8 @@
 {
-    "name": "noteapp",
+    "name": "notesapp",
     "private": true,
-    "version": "0.5.1",
-    "homepage": "https://Jkerdley.github.io/noteapp",
+    "version": "0.9.1",
+    "homepage": "https://Jkerdley.github.io/notesapp",
     "type": "module",
     "scripts": {
         "dev": "vite",
