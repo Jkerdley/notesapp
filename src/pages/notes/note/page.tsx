@@ -1,195 +1,127 @@
-// import { useNavigate, useParams } from "react-router-dom";
-// import styles from "./notePage.module.css";
-// import { Button } from "@mui/material";
-// import { dbService, type Note } from "../../../shared/lib/api/notes-db";
-// import { useEffect, useState } from "react";
-// import { DataErrorBoundary } from "../../../shared/components";
-// import { Loader } from "../../../shared/ui";
-
-// export const NotePage = () => {
-//     const { id } = useParams();
-//     const navigate = useNavigate();
-//     const [note, setNote] = useState<Note | null>(null);
-//     const [isUpdating, setIsUpdating] = useState(false);
-//     const [inputData, setInputData] = useState({
-//         title: note?.title || "",
-//         content: note?.content || "",
-//     });
-
-//     useEffect(() => {
-//         if (!id) return;
-
-//         const loadNote = async () => {
-//             const noteId = Number(id);
-//             const loadedNote = await dbService.getNote(noteId);
-//             setNote(loadedNote || null);
-//         };
-
-//         loadNote();
-//     }, [id]);
-
-//     const handleDelete = async () => {
-//         if (!id) return;
-//         await dbService.deleteNote(Number(id));
-//         navigate("/notes");
-//     };
-
-//     const handleUpdate = async (id, dataset) => {
-//         if (!id) return;
-//         await dbService.updateNote(id, dataset);
-//         navigate(`/notes/${id}`);
-//     };
-
-//     const handleSetUpdateMode = () => {
-//         setIsUpdating((prev) => !prev);
-//     };
-
-//     if (!note) return <div>Заметка не найдена...</div>;
-
-//     return (
-//         <DataErrorBoundary error={error} message="Не удалось загрузить данные о заметке">
-//             {isLoading && <Loader />}
-//             {note ? (
-//                 <article className={styles.notePageContainer}>
-//                     <div className={styles.noteActions}>
-//                         <Button variant="contained" color="error" onClick={handleDelete}>
-//                             Удалить
-//                         </Button>
-//                         <Button variant="contained" color="primary" onClick={handleSetUpdateMode}>
-//                             Редактировать
-//                         </Button>
-//                     </div>
-//                     <div className={styles.infoContainer}>
-//                         <h2>{note.title}</h2>
-//                         <div className={styles.noteContent}>{note.content}</div>
-//                         <div className={styles.noteMeta}>
-//                             <span>Создано: {new Date(note.createdAt).toLocaleString()}</span>
-//                             <span>Обновлено: {new Date(note.updatedAt).toLocaleString()}</span>
-//                         </div>
-//                     </div>
-//                 </article>
-//             ) : (
-//                 !isLoading && <h1>"Заметка не найдена"</h1>
-//             )}
-//         </DataErrorBoundary>
-//     );
-// };
-
-import { useNavigate, useParams } from "react-router-dom";
-import styles from "./notePage.module.css";
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Button, TextField } from "@mui/material";
 import { dbService } from "../../../shared/lib/api/notes-db";
-import { useEffect, useState } from "react";
-import { Loader } from "../../../shared/ui";
+import { marked } from "marked";
 import { useDebouncedCallback } from "use-debounce";
-import { DataErrorBoundary } from "../../../shared/components";
+import styles from "./notePage.module.css";
+import { useLiveQuery } from "dexie-react-hooks";
 
 export const NotePage = () => {
+    //     const { id } = useParams();
+    //     const navigate = useNavigate();
+    //     const isNew = id === "new";
+    //     const noteId = isNew ? undefined : Number(id);
     const { id } = useParams();
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const noteId = Number(id);
+    const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({ title: "", content: "" });
-    const [metaData, setMetaData] = useState({ createdAt: new Date(), updatedAt: new Date() });
-    const [isUpdating, setIsUpdating] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+
+    const note = useLiveQuery(() => dbService.getNote(noteId), [noteId]);
 
     useEffect(() => {
-        if (!id) return;
+        if (note) {
+            setFormData({ title: note.title, content: note.content });
+        }
+    }, [note]);
 
-        const loadNote = async () => {
-            try {
-                const note = await dbService.getNote(Number(id));
-                if (note) {
-                    setFormData({ title: note.title, content: note.content });
-                    setMetaData({ createdAt: note.createdAt, updatedAt: note.updatedAt });
-                } else {
-                    setError("Заметка не найдена");
-                }
-            } catch (err) {
-                setError("Ошибка загрузки заметки");
-                console.error(err);
-            } finally {
-                setIsLoading(false);
-            }
-        };
+    //     useEffect(() => {
+    //         if (isNew && createdNoteId === null) {
+    //             (async () => {
+    //                 const newId = await dbService.addNote({
+    //                     title: formData.title,
+    //                     content: formData.content,
+    //                     createdAt: new Date(),
+    //                     updatedAt: new Date(),
+    //                 });
+    //                 setCreatedNoteId(newId);
+    //                 navigate(`/notes/${newId}`, { replace: true });
+    //             })();
+    //         }
+    //     }, [isNew, createdNoteId, formData, navigate]);
 
-        loadNote();
-    }, [id]);
+    const debouncedSave = useDebouncedCallback(async () => {
+        if (!noteId || !isEditing) return;
 
-    // Автосохранение при редактировании
-    const saveNote = useDebouncedCallback(async () => {
-        if (!id || !isUpdating) return;
-        await dbService.updateNote(Number(id), formData);
-        setMetaData((prev) => ({ ...prev, updatedAt: new Date() }));
+        setIsSaving(true);
+        try {
+            await dbService.updateNote(noteId, formData);
+        } catch (error) {
+            console.error("Ошибка автосохранения:", error);
+        } finally {
+            setIsSaving(false);
+        }
     }, 500);
 
     useEffect(() => {
-        if (isUpdating) saveNote();
-    }, [formData, isUpdating, saveNote]);
+        if (isEditing) {
+            debouncedSave();
+        }
+    }, [formData, isEditing, debouncedSave]);
 
-    // Обработчики действий
     const handleDelete = async () => {
         if (window.confirm("Удалить заметку?")) {
-            await dbService.deleteNote(Number(id!));
+            await dbService.deleteNote(noteId);
             navigate("/notes");
         }
     };
 
-    const toggleEditMode = () => setIsUpdating(!isUpdating);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    if (isLoading) return <Loader />;
+    if (!note) return <p>Заметка не найдена</p>;
 
     return (
-        <DataErrorBoundary error={error} message="Не удалось загрузить данные о заметке">
-            <article className={styles.notePageContainer}>
-                <div className={styles.noteActions}>
-                    <Button variant="contained" color="error" onClick={handleDelete}>
-                        Удалить
-                    </Button>
-                    <Button variant="contained" color="primary" onClick={toggleEditMode}>
-                        {isUpdating ? "Готово" : "Редактировать"}
-                    </Button>
-                </div>
+        <section className={styles.notePageContainer}>
+            <div className={styles.notePageButtons}>
+                <Button variant="contained" color="error" onClick={handleDelete}>
+                    Удалить
+                </Button>
 
-                <div className={styles.infoContainer}>
-                    {isUpdating ? (
-                        <>
-                            <TextField
-                                fullWidth
-                                name="title"
-                                value={formData.title}
-                                onChange={handleChange}
-                                label="Заголовок"
-                                variant="outlined"
-                                margin="normal"
-                            />
-                            <TextField
-                                fullWidth
-                                multiline
-                                rows={10}
-                                name="content"
-                                value={formData.content}
-                                onChange={handleChange}
-                                label="Содержание"
-                                variant="outlined"
-                                margin="normal"
-                            />
-                        </>
-                    ) : (
-                        <>
-                            <h2>{formData.title}</h2>
-                            <div className={styles.noteContent}>{formData.content}</div>
-                            <div className={styles.noteMeta}>
-                                <span>Создано: {new Date(metaData.createdAt).toLocaleString()}</span>
-                                <span>Обновлено: {new Date(metaData.updatedAt).toLocaleString()}</span>
-                            </div>
-                        </>
-                    )}
-                </div>
-            </article>
-        </DataErrorBoundary>
+                <Button variant="contained" onClick={() => setIsEditing(!isEditing)}>
+                    {isEditing ? "Сохранить" : "Редактировать"}
+                </Button>
+                {isEditing || isSaving ? (
+                    <span className={styles.savingIndicator}>Сохранение...</span>
+                ) : (
+                    <span className={styles.savedIndicator}>✓ Сохранено</span>
+                )}
+            </div>
+
+            {isEditing ? (
+                <>
+                    <TextField
+                        fullWidth
+                        name="title"
+                        value={formData.title}
+                        onChange={handleChange}
+                        label="Заголовок"
+                        margin="normal"
+                    />
+                    <TextField
+                        fullWidth
+                        multiline
+                        name="content"
+                        value={formData.content}
+                        onChange={handleChange}
+                        label="Содержание (Markdown)"
+                        margin="normal"
+                        rows={12}
+                    />
+                </>
+            ) : (
+                <>
+                    <h2>{formData.title}</h2>
+                    <div dangerouslySetInnerHTML={{ __html: marked(formData.content || "") }} />
+                    <div className={styles.infoContainer}>
+                        <span>Создано: {new Date(note.createdAt).toLocaleString()}</span>
+                        <span>Обновлено: {new Date(note.updatedAt).toLocaleString()}</span>
+                    </div>
+                </>
+            )}
+        </section>
     );
 };

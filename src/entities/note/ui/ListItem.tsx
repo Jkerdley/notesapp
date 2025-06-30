@@ -1,21 +1,29 @@
+import { Link } from "react-router-dom";
 import styles from "./ListItem.module.css";
 import type { Note } from "../../../shared/lib/api/notes-db";
+import { AddNoteButton } from "../../../features/addNote/AddNoteButton";
 
 interface ListItemProps {
-    note: Note;
-    onClick?: () => void;
+    note?: Note;
+    link: string;
+    isAddButton?: boolean;
 }
 
-export const ListItem = ({ note, onClick }: ListItemProps) => {
+export const ListItem = ({ note, link, isAddButton }: ListItemProps) => {
     return (
-        <article onClick={onClick} className={styles.noteCard}>
-            <div className={styles.infoContainer}>
-                <p>{note.title}</p>
-                <div className={styles.noteInfo}>
-                    <p className={styles.noteDescription}>{note.content}</p>
-                    {/* <p>{note.createdAt}</p> */}
-                </div>
-            </div>
-        </article>
+        <Link to={link} className={styles.linkWrapper}>
+            {isAddButton ? (
+                <AddNoteButton link={link} />
+            ) : (
+                <article className={styles.noteCard}>
+                    <div className={styles.infoContainer}>
+                        <p>{note?.title}</p>
+                        <div className={styles.noteInfo}>
+                            <p className={styles.noteDescription}>{note?.content}</p>
+                        </div>
+                    </div>
+                </article>
+            )}
+        </Link>
     );
 };

@@ -44,7 +44,6 @@
 }
 
 
-/* Новые */
 .noteActions {
   display: flex;
   justify-content: flex-end;
@@ -64,4 +63,20 @@
   color: #666;
   font-size: 0.9rem;
   gap: 0.5rem;
+}
+
+.emptySelection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 20px;
+  text-align: center;
+}
+
+.emptySelection .addNoteCard {
+  margin-top: 20px;
+  width: 100px;
+  height: 100px;
 }

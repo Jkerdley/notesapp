@@ -57,3 +57,7 @@
   padding-right: 0.25rem;
   text-align: left;
 }
+
+.linkWrapper {
+  text-decoration: none;
+}
