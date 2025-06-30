@@ -1,0 +1,40 @@
+.addNoteCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1.25rem;
+    background: rgba(212, 216, 224, 0.6);
+    border: 2px dashed #ccc;
+    border-radius: 1rem;
+    padding-inline: 1rem;
+    padding-bottom: 1rem;
+    backdrop-filter: blur(2rem);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    margin-inline: 1rem;
+}
+
+.addNoteCard:hover {
+    background: rgba(222, 226, 234, 1);
+    transform: scale(1.02);
+    border-color: #888;
+}
+
+.addButton {
+    font-size: 3rem;
+    color: #666;
+    line-height: 1;
+}
+
+.addText {
+    font-size: 1rem;
+    color: #666;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+.linkWrapper {
+    text-decoration: none;
+    color: inherit;
+}

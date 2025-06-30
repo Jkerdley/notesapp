@@ -42,6 +42,7 @@ export function Router() {
                         </PrivateRoute>
                     }
                 >
+                    <Route path="new" element={<NotePage />} />
                     <Route path=":id" element={<NotePage />} />
                 </Route>
             </Route>

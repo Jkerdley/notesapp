@@ -42,7 +42,7 @@ export const dbService = {
         });
     },
 
-    async updateNote(id: number, changes: Partial<Note>): Promise<number> {
+    async updateNote(id: number, changes: Partial<Note>) {
         return await db.notes.update(id, {
             ...changes,
             updatedAt: new Date(),
